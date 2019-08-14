@@ -17,9 +17,9 @@ class Endereco():
         self.cep = html.find(id="cep").get('value')
 
     def set_endereco_completo(self, cep):
-        data = {'cep':cep}
-        headers = {'Authorization': 'Token token="c3daf68caa060aebbada99a595fd88d8"'}
-        r = get('http://www.cepaberto.com/api/v2/ceps.json', data, headers=headers)
+        url = 'http://www.cepaberto.com/api/v3/cep?cep=' + str(cep)
+        headers = {'Authorization': 'Token token=c3daf68caa060aebbada99a595fd88d8'}
+        r = get(url, data, headers=headers)
         dados = r.json()
         self.estado = dados['estado']
         self.cidade = dados['cidade']
@@ -33,7 +33,7 @@ class Endereco():
             self.ddd = '00'
             self.set_ddd_alternativo(self.estado, self.cidade)
 
-    def set_ddd_alternativo(estado, cidade):
+    def set_ddd_alternativo(self, estado, cidade):
         url = 'http://ddd.pricez.com.br/estados/{0}.json'.format(estado.lower())
         r = get(url)
         json_list = r.json()['payload']
